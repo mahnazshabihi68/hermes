@@ -1,0 +1,81 @@
+version: "3.9"
+
+services:
+
+  app:
+    build:
+      args:
+        user: hermes
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile-prod
+    image: hermes-backend:8.1
+    container_name: hermes-backend
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - './:/var/www/hermes-backend'
+    depends_on:
+      - mongodb
+      - redis
+    ports:
+      - '9000:9000'
+      - '9581:9581'
+      - '6000:6000'
+    networks:
+      - hermes
+
+  mongodb:
+    image: mongo:5.0.6
+    container_name: hermes-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: '${MONGODB_USERNAME}'
+      MONGO_INITDB_ROOT_PASSWORD: '${MONGODB_PASSWORD}'
+      MONGO_INITDB_DATABASE: '${MONGODB_DATABASE}'
+    ports:
+      - '27017:27017'
+    volumes:
+      - 'hermes-mongo-data:/data/db'
+    networks:
+      - hermes
+
+  nginx:
+    image: nginx:1.20.2
+    container_name: hermes-nginx
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - './:/var/www/'
+      - './docker/nginx/conf.d:/etc/nginx/conf.d/'
+      - './public:/usr/share/nginx/html/'
+    depends_on:
+      - app
+    links:
+      - app
+    networks:
+      - hermes
+
+  redis:
+    image: redis:6.2.6
+    container_name: hermes-redis
+    restart: unless-stopped
+    tty: true
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'hermes-redis-data:/data'
+    networks:
+      - hermes
+
+networks:
+  hermes:
+    driver: bridge
+
+volumes:
+  hermes-mongo-data:
+    driver: local
+  hermes-redis-data:
+    driver: local

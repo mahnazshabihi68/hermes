@@ -1,0 +1,172 @@
+name: Orders
+description: |-
+
+  APIs for managing orders.
+
+  <aside>
+  <ul>
+  <li>All order id's in url parameters should be <b>internal_order_id</b> property of order.</li>
+  <ul>
+  </aside>
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/orders
+    metadata:
+      title: 'Get All'
+      description: 'This endpoint will deliver an object of all orders sorted by descending order of @created_at.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"orders":[{"_id":"62a3b82b15289e53340e4f83","exchange_order_id":null,"status":"PARTIALLY_FILLED","is_active_stop_limit":false,"stop_price":null,"original_market_price":"29175.57000000","executed_quantity":"9.92925000","type":"LIMIT","side":"SELL","original_quantity":"10.00000000","original_price":"28000.00000000","is_virtual":false,"market_market":"BTC-USDT","fill_percentage":"99.29","executed_price":"29173.51525524","cumulative_quote_quantity":"289671.12634810","internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","updated_at":"2022-06-10T21:31:44.875000Z","created_at":"2022-06-10T21:31:23.557000Z","remained_quantity":"0.07075000"}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '1000'
+          x-ratelimit-remaining: '991'
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/orders
+    metadata:
+      title: Store
+      description: 'This endpoint will store a new order.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      type:
+        name: type
+        description: 'The execution type of order. Must be one of <code>LIMIT</code>, <code>MARKET</code>, <code>STOPLOSSLIMIT</code>, or <code>OTC</code>.'
+        required: true
+        example: LIMIT
+        type: string
+        custom: []
+      side:
+        name: side
+        description: 'The side of order. Must be one of <code>BUY</code> or <code>SELL</code>.'
+        required: true
+        example: SELL
+        type: string
+        custom: []
+      market:
+        name: market
+        description: 'The name of market.'
+        required: true
+        example: BTC-USDT
+        type: string
+        custom: []
+      original_quantity:
+        name: original_quantity
+        description: 'The quantity of order.'
+        required: true
+        example: 0.12345
+        type: number
+        custom: []
+      original_price:
+        name: original_price
+        description: 'The price of order. This field is required unless <code>type</code> is in <code>MARKET</code> or <code>OTC</code>.'
+        required: false
+        example: 20000.0
+        type: number
+        custom: []
+      stop_price:
+        name: stop_price
+        description: 'The trigger price for stoplosslimit type of orders. This field is required when <code>type</code> is <code>STOPLOSSLIMIT</code>.'
+        required: false
+        example: 25000.0
+        type: number
+        custom: []
+      is_virtual:
+        name: is_virtual
+        description: 'The queue of order.'
+        required: true
+        example: false
+        type: boolean
+        custom: []
+    responses:
+      -
+        status: 201
+        content: '{"message":"Order had been successfully created.","order":{"_id":"62a3b846a10204b5c504d953","exchange_order_id":null,"status":"PENDING","is_active_stop_limit":false,"stop_price":"25000.00000000","original_market_price":"29175.57000000","executed_quantity":"0.00000000","type":"LIMIT","side":"SELL","original_quantity":"0.12345000","original_price":"20000.00000000","is_virtual":false,"market_market":"BTC-USDT","fill_percentage":"0.00","executed_price":"0.00000000","cumulative_quote_quantity":"0.00000000","internal_order_id":"9683110f-2f65-401e-9fca-de5b47e4099c","updated_at":"2022-06-10T21:31:50.902000Z","created_at":"2022-06-10T21:31:50.902000Z","remained_quantity":"0.12345000"}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '1000'
+          x-ratelimit-remaining: '989'
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/orders/{order}'
+    metadata:
+      title: Cancel
+      description: "This endpoint will cancel the order if it's cancelable."
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      order:
+        name: order
+        description: 'The <b>internal_order_id</b> of order.'
+        required: true
+        example: 9682ff55-f205-4af4-8d1b-189b2dbb5ff2
+        type: string
+        custom: []
+    queryParameters: []
+    bodyParameters: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/orders/{order}'
+    metadata:
+      title: 'Get By ID'
+      description: "This endpoint will deliver the very single object of specified order by it's ID."
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      order:
+        name: order
+        description: 'The <b>internal_order_id</b> of order.'
+        required: true
+        example: 968310e5-7681-418b-b203-4ebeccbba0e2
+        type: string
+        custom: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"order":{"_id":"62a3b82b15289e53340e4f83","exchange_order_id":null,"status":"PARTIALLY_FILLED","is_active_stop_limit":false,"stop_price":null,"original_market_price":"29175.57000000","executed_quantity":"9.92925000","type":"LIMIT","side":"SELL","original_quantity":"10.00000000","original_price":"28000.00000000","is_virtual":false,"market_market":"BTC-USDT","fill_percentage":"99.29","executed_price":"29173.51525524","cumulative_quote_quantity":"289671.12634810","internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","updated_at":"2022-06-10T21:31:44.875000Z","created_at":"2022-06-10T21:31:23.557000Z","remained_quantity":"0.07075000","trades":[{"_id":"62a3b840ead0c360f60174c4","quantity":"1.20608000","price":"29175.56000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-c002-4a75-b687-eb221fe880d8","updated_at":"2022-06-10T21:31:44.716000Z","created_at":"2022-06-10T21:31:44.716000Z","cumulative_quote_quantity":"35188.05940480"},{"_id":"62a3b840ead0c360f60174c5","quantity":"0.02058000","price":"29175.53000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-c12c-48fc-a099-b787037325ac","updated_at":"2022-06-10T21:31:44.719000Z","created_at":"2022-06-10T21:31:44.719000Z","cumulative_quote_quantity":"600.43240740"},{"_id":"62a3b840ead0c360f60174c6","quantity":"0.25654000","price":"29175.27000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-c236-441d-a42c-c994c99d3a27","updated_at":"2022-06-10T21:31:44.722000Z","created_at":"2022-06-10T21:31:44.722000Z","cumulative_quote_quantity":"7484.62376580"},{"_id":"62a3b840ead0c360f60174c7","quantity":"0.01000000","price":"29175.09000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-c341-4e82-92a8-d0fb65840c7f","updated_at":"2022-06-10T21:31:44.725000Z","created_at":"2022-06-10T21:31:44.725000Z","cumulative_quote_quantity":"291.75090000"},{"_id":"62a3b840ead0c360f60174c8","quantity":"0.26049000","price":"29174.98000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-c452-4f23-8040-ec482d6e766c","updated_at":"2022-06-10T21:31:44.727000Z","created_at":"2022-06-10T21:31:44.727000Z","cumulative_quote_quantity":"7599.79054020"},{"_id":"62a3b840ead0c360f60174c9","quantity":"0.41100000","price":"29174.83000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-c562-4cfc-a987-2e51430c929d","updated_at":"2022-06-10T21:31:44.730000Z","created_at":"2022-06-10T21:31:44.730000Z","cumulative_quote_quantity":"11990.85513000"},{"_id":"62a3b840ead0c360f60174ca","quantity":"0.01150000","price":"29174.76000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-c681-4e43-a399-5fc136d9cc9e","updated_at":"2022-06-10T21:31:44.733000Z","created_at":"2022-06-10T21:31:44.733000Z","cumulative_quote_quantity":"335.50974000"},{"_id":"62a3b840ead0c360f60174cb","quantity":"0.01150000","price":"29174.71000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-c7c6-4737-ac96-9d0b2801c0fa","updated_at":"2022-06-10T21:31:44.736000Z","created_at":"2022-06-10T21:31:44.736000Z","cumulative_quote_quantity":"335.50916500"},{"_id":"62a3b840ead0c360f60174cc","quantity":"0.32142000","price":"29174.32000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-c8e7-4675-9c1c-c98730bcafe1","updated_at":"2022-06-10T21:31:44.739000Z","created_at":"2022-06-10T21:31:44.739000Z","cumulative_quote_quantity":"9377.20993440"},{"_id":"62a3b840ead0c360f60174cd","quantity":"0.32357000","price":"29174.16000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-ca0d-48b2-91ea-f57f50d0b27f","updated_at":"2022-06-10T21:31:44.742000Z","created_at":"2022-06-10T21:31:44.742000Z","cumulative_quote_quantity":"9439.88295120"},{"_id":"62a3b840ead0c360f60174ce","quantity":"0.08805000","price":"29174.06000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-cb23-40db-9ac4-dabf1d3514f3","updated_at":"2022-06-10T21:31:44.745000Z","created_at":"2022-06-10T21:31:44.745000Z","cumulative_quote_quantity":"2568.77598300"},{"_id":"62a3b840ead0c360f60174cf","quantity":"0.33060000","price":"29174.05000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-cc43-4651-9c95-97a153d077a8","updated_at":"2022-06-10T21:31:44.748000Z","created_at":"2022-06-10T21:31:44.748000Z","cumulative_quote_quantity":"9644.94093000"},{"_id":"62a3b840ead0c360f60174d0","quantity":"0.00039000","price":"29174.02000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-cd6f-4a6c-85fa-395cd4a68a25","updated_at":"2022-06-10T21:31:44.751000Z","created_at":"2022-06-10T21:31:44.751000Z","cumulative_quote_quantity":"11.37786780"},{"_id":"62a3b840ead0c360f60174d1","quantity":"0.32828000","price":"29174.00000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-ce97-4457-9f1c-0a050f0954b7","updated_at":"2022-06-10T21:31:44.754000Z","created_at":"2022-06-10T21:31:44.754000Z","cumulative_quote_quantity":"9577.24072000"},{"_id":"62a3b840ead0c360f60174d2","quantity":"0.32572000","price":"29173.84000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-cfc3-41af-8c6e-4aab8597de54","updated_at":"2022-06-10T21:31:44.757000Z","created_at":"2022-06-10T21:31:44.757000Z","cumulative_quote_quantity":"9502.50316480"},{"_id":"62a3b840ead0c360f60174d3","quantity":"0.01150000","price":"29173.76000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-d0fe-4a9b-98f6-41c9cb13bdea","updated_at":"2022-06-10T21:31:44.760000Z","created_at":"2022-06-10T21:31:44.760000Z","cumulative_quote_quantity":"335.49824000"},{"_id":"62a3b840ead0c360f60174d4","quantity":"0.01150000","price":"29173.71000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-d232-43e9-87bb-431ec27e5a9f","updated_at":"2022-06-10T21:31:44.763000Z","created_at":"2022-06-10T21:31:44.763000Z","cumulative_quote_quantity":"335.49766500"},{"_id":"62a3b840ead0c360f60174d5","quantity":"0.31176000","price":"29173.68000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-d35c-44ae-9612-7fc5a7d7ecc2","updated_at":"2022-06-10T21:31:44.766000Z","created_at":"2022-06-10T21:31:44.766000Z","cumulative_quote_quantity":"9095.18647680"},{"_id":"62a3b840ead0c360f60174d6","quantity":"0.55638000","price":"29173.57000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-d495-44ca-8470-3a96a26fdb14","updated_at":"2022-06-10T21:31:44.769000Z","created_at":"2022-06-10T21:31:44.769000Z","cumulative_quote_quantity":"16231.59087660"},{"_id":"62a3b840ead0c360f60174d7","quantity":"0.08910000","price":"29173.54000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-d5cc-4a4a-bca2-78a35ea442a7","updated_at":"2022-06-10T21:31:44.772000Z","created_at":"2022-06-10T21:31:44.772000Z","cumulative_quote_quantity":"2599.36241400"},{"_id":"62a3b840ead0c360f60174d8","quantity":"0.33019000","price":"29173.52000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-d6ff-43c6-aa69-f678f92f80bd","updated_at":"2022-06-10T21:31:44.775000Z","created_at":"2022-06-10T21:31:44.775000Z","cumulative_quote_quantity":"9632.80456880"},{"_id":"62a3b840ead0c360f60174d9","quantity":"0.32077000","price":"29173.36000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-d830-47a0-8d12-538f511c6596","updated_at":"2022-06-10T21:31:44.778000Z","created_at":"2022-06-10T21:31:44.778000Z","cumulative_quote_quantity":"9357.93868720"},{"_id":"62a3b840ead0c360f60174da","quantity":"0.31199000","price":"29173.20000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-d966-4a2f-824a-0d7bc22d55a9","updated_at":"2022-06-10T21:31:44.781000Z","created_at":"2022-06-10T21:31:44.781000Z","cumulative_quote_quantity":"9101.74666800"},{"_id":"62a3b840ead0c360f60174db","quantity":"0.32436000","price":"29173.04000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-da99-4b90-850f-025898e0440b","updated_at":"2022-06-10T21:31:44.784000Z","created_at":"2022-06-10T21:31:44.784000Z","cumulative_quote_quantity":"9462.56725440"},{"_id":"62a3b840ead0c360f60174dc","quantity":"0.32690000","price":"29172.88000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-dbd2-4883-bb59-78fbf9f30627","updated_at":"2022-06-10T21:31:44.788000Z","created_at":"2022-06-10T21:31:44.788000Z","cumulative_quote_quantity":"9536.61447200"},{"_id":"62a3b840ead0c360f60174dd","quantity":"0.00313000","price":"29172.83000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-dd0c-4e05-a684-6b82fa5aac4b","updated_at":"2022-06-10T21:31:44.791000Z","created_at":"2022-06-10T21:31:44.791000Z","cumulative_quote_quantity":"91.31095790"},{"_id":"62a3b840ead0c360f60174de","quantity":"0.01150000","price":"29172.76000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-de47-4212-8030-1da6018020d0","updated_at":"2022-06-10T21:31:44.794000Z","created_at":"2022-06-10T21:31:44.794000Z","cumulative_quote_quantity":"335.48674000"},{"_id":"62a3b840ead0c360f60174df","quantity":"1.18469000","price":"29172.72000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-df80-4e05-b444-1b4498fbd27e","updated_at":"2022-06-10T21:31:44.797000Z","created_at":"2022-06-10T21:31:44.797000Z","cumulative_quote_quantity":"34560.62965680"},{"_id":"62a3b840ead0c360f60174e0","quantity":"0.00700000","price":"29172.71000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-e0c8-4d8a-93fa-b06e2bb8700c","updated_at":"2022-06-10T21:31:44.800000Z","created_at":"2022-06-10T21:31:44.800000Z","cumulative_quote_quantity":"204.20897000"},{"_id":"62a3b840ead0c360f60174e1","quantity":"0.31881000","price":"29172.56000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-e210-441b-aed0-d100d863c915","updated_at":"2022-06-10T21:31:44.804000Z","created_at":"2022-06-10T21:31:44.804000Z","cumulative_quote_quantity":"9300.50385360"},{"_id":"62a3b840ead0c360f60174e2","quantity":"0.01366000","price":"29172.47000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-e356-4d4b-b256-662fd172b082","updated_at":"2022-06-10T21:31:44.807000Z","created_at":"2022-06-10T21:31:44.807000Z","cumulative_quote_quantity":"398.49594020"},{"_id":"62a3b840ead0c360f60174e3","quantity":"0.32494000","price":"29172.40000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-e49e-428d-9c89-3a37b2904fb8","updated_at":"2022-06-10T21:31:44.810000Z","created_at":"2022-06-10T21:31:44.810000Z","cumulative_quote_quantity":"9479.27965600"},{"_id":"62a3b840ead0c360f60174e4","quantity":"0.00099000","price":"29172.39000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-e5e6-44a6-b07c-34da5f6f5dec","updated_at":"2022-06-10T21:31:44.813000Z","created_at":"2022-06-10T21:31:44.813000Z","cumulative_quote_quantity":"28.88066610"},{"_id":"62a3b840ead0c360f60174e5","quantity":"0.00681000","price":"29172.34000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-e73a-42c9-a0a2-407b9397b54f","updated_at":"2022-06-10T21:31:44.817000Z","created_at":"2022-06-10T21:31:44.817000Z","cumulative_quote_quantity":"198.66363540"},{"_id":"62a3b840ead0c360f60174e6","quantity":"0.03787000","price":"29172.33000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-e88c-42f3-97e1-ae56727a6248","updated_at":"2022-06-10T21:31:44.820000Z","created_at":"2022-06-10T21:31:44.820000Z","cumulative_quote_quantity":"1104.75613710"},{"_id":"62a3b840ead0c360f60174e7","quantity":"0.59720000","price":"29172.24000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-e9da-404d-b35b-c48027004436","updated_at":"2022-06-10T21:31:44.823000Z","created_at":"2022-06-10T21:31:44.823000Z","cumulative_quote_quantity":"17421.66172800"},{"_id":"62a3b840ead0c360f60174e8","quantity":"0.01221000","price":"29172.18000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-eb2b-43d1-a008-06c6ee4ae3d9","updated_at":"2022-06-10T21:31:44.827000Z","created_at":"2022-06-10T21:31:44.827000Z","cumulative_quote_quantity":"356.19231780"},{"_id":"62a3b840ead0c360f60174e9","quantity":"0.01150000","price":"29171.76000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-ec77-448b-81d8-66e2cac26578","updated_at":"2022-06-10T21:31:44.830000Z","created_at":"2022-06-10T21:31:44.830000Z","cumulative_quote_quantity":"335.47524000"},{"_id":"62a3b840ead0c360f60174ea","quantity":"0.20066000","price":"29171.74000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-edd8-4d09-a6d4-8e4256708d90","updated_at":"2022-06-10T21:31:44.834000Z","created_at":"2022-06-10T21:31:44.834000Z","cumulative_quote_quantity":"5853.60134840"},{"_id":"62a3b840ead0c360f60174eb","quantity":"0.01150000","price":"29171.71000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-ef3e-402c-b363-fd8acaac57f4","updated_at":"2022-06-10T21:31:44.837000Z","created_at":"2022-06-10T21:31:44.837000Z","cumulative_quote_quantity":"335.47466500"},{"_id":"62a3b840ead0c360f60174ec","quantity":"0.06599000","price":"29171.48000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-f093-4ef1-8428-da0b3cbadc31","updated_at":"2022-06-10T21:31:44.841000Z","created_at":"2022-06-10T21:31:44.841000Z","cumulative_quote_quantity":"1925.02596520"},{"_id":"62a3b840ead0c360f60174ed","quantity":"0.30967000","price":"29171.42000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-f1e7-48dd-8f2f-d1b48b91b31f","updated_at":"2022-06-10T21:31:44.844000Z","created_at":"2022-06-10T21:31:44.844000Z","cumulative_quote_quantity":"9033.51363140"},{"_id":"62a3b840ead0c360f60174ee","quantity":"0.08281000","price":"29171.05000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-f341-4860-a3c0-da36f28ae56d","updated_at":"2022-06-10T21:31:44.848000Z","created_at":"2022-06-10T21:31:44.848000Z","cumulative_quote_quantity":"2415.65465050"},{"_id":"62a3b840ead0c360f60174ef","quantity":"0.12616000","price":"29171.00000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-f49b-4ded-94f6-8a11c6e32e89","updated_at":"2022-06-10T21:31:44.851000Z","created_at":"2022-06-10T21:31:44.851000Z","cumulative_quote_quantity":"3680.21336000"},{"_id":"62a3b840ead0c360f60174f0","quantity":"0.00482000","price":"29170.96000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-f5ff-443a-93fb-9240ad04b5e0","updated_at":"2022-06-10T21:31:44.855000Z","created_at":"2022-06-10T21:31:44.855000Z","cumulative_quote_quantity":"140.60402720"},{"_id":"62a3b840ead0c360f60174f1","quantity":"0.01645000","price":"29170.79000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-f772-4185-9e80-f24551d09801","updated_at":"2022-06-10T21:31:44.858000Z","created_at":"2022-06-10T21:31:44.858000Z","cumulative_quote_quantity":"479.85949550"},{"_id":"62a3b840ead0c360f60174f2","quantity":"0.00571000","price":"29170.78000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-f8d6-4e5e-93a1-887fc8acc181","updated_at":"2022-06-10T21:31:44.862000Z","created_at":"2022-06-10T21:31:44.862000Z","cumulative_quote_quantity":"166.56515380"},{"_id":"62a3b840ead0c360f60174f3","quantity":"0.01150000","price":"29170.76000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-fa37-45bc-a90e-5dfcd5a6c5ad","updated_at":"2022-06-10T21:31:44.865000Z","created_at":"2022-06-10T21:31:44.865000Z","cumulative_quote_quantity":"335.46374000"},{"_id":"62a3b840ead0c360f60174f4","quantity":"0.01150000","price":"29170.71000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-fb93-4dcb-a860-41a3bf0afed9","updated_at":"2022-06-10T21:31:44.869000Z","created_at":"2022-06-10T21:31:44.869000Z","cumulative_quote_quantity":"335.46316500"},{"_id":"62a3b840ead0c360f60174f5","quantity":"0.05200000","price":"29170.61000000","causes_inequality":true,"is_cleared":false,"order_internal_order_id":"968310e5-7681-418b-b203-4ebeccbba0e2","internal_trade_id":"96831105-fcf5-4eda-b271-73bff218c5bb","updated_at":"2022-06-10T21:31:44.872000Z","created_at":"2022-06-10T21:31:44.872000Z","cumulative_quote_quantity":"1516.87172000"}]}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '1000'
+          x-ratelimit-remaining: '990'
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []

@@ -1,0 +1,27 @@
+stages:
+  - build
+  - deploy
+
+Build:
+  stage: build
+  script:
+    - cp ${ENV_DEV} env
+    - docker-compose -f docker-compose-develop.yml build --no-cache
+  only:
+    - deployment
+  tags:
+#    - stage
+    - stage2
+
+
+Deploy:
+  stage: deploy
+  script:
+    - docker-compose -f docker-compose-develop.yml stop
+    - docker-compose -f docker-compose-develop.yml rm -f
+    - docker-compose -f docker-compose-develop.yml up -d 
+  only:
+    - deployment
+  tags:
+#    - stage
+    - stage2
